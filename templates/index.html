@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VisionTrack | Computer Vision Telemetry</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                VT
+            </div>
+
+            <div>
+                <h1>VisionTrack</h1>
+                <span>Computer Vision Telemetry</span>
+            </div>
+
+        </div>
+
+        <div class="system-status">
+            <span class="status-dot"></span>
+            <span>TRACKING SYSTEM ONLINE</span>
+        </div>
+
+    </header>
+
+
+    <section class="hero">
+
+        <div class="hero-copy">
+
+            <span class="eyebrow">
+                REAL-TIME COMPUTER VISION
+            </span>
+
+            <h2>
+                Object Tracking
+                <span>Telemetry</span>
+            </h2>
+
+            <p>
+                Live detection, movement analysis, trajectory tracking
+                and processing performance in one interface.
+            </p>
+
+        </div>
+
+        <div class="hero-metrics">
+
+            <div class="hero-metric">
+                <span>MODE</span>
+                <strong>LIVE</strong>
+            </div>
+
+            <div class="hero-metric">
+                <span>ENGINE</span>
+                <strong>OpenCV</strong>
+            </div>
+
+            <div class="hero-metric">
+                <span>STREAM</span>
+                <strong>ACTIVE</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <main class="dashboard-grid">
+
+
+        <!-- LIVE CAMERA -->
+
+        <section class="panel camera-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-label">
+                        LIVE FEED
+                    </span>
+
+                    <h3>
+                        Camera Stream
+                    </h3>
+                </div>
+
+                <div class="camera-controls">
+
+                    <div class="live-indicator">
+                        <span></span>
+                        LIVE
+                    </div>
+
+                    <button
+                        type="button"
+                        id="reset-tracking"
+                        class="reset-button"
+                    >
+                        RESET SESSION
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="camera-container">
+
+                <img
+                    src="{{ url_for('video_feed') }}"
+                    alt="Live computer vision tracking stream"
+                    class="camera-feed"
+                >
+
+                <div class="camera-overlay">
+
+                    <div class="overlay-corner top-left"></div>
+                    <div class="overlay-corner top-right"></div>
+                    <div class="overlay-corner bottom-left"></div>
+                    <div class="overlay-corner bottom-right"></div>
+
+                    <div class="scan-line"></div>
+
+                    <div class="camera-info">
+
+                        <span>
+                            VISION / TRACKING
+                        </span>
+
+                        <span id="camera-status">
+                            ACTIVE
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- PRIMARY TELEMETRY -->
+
+        <section class="panel telemetry-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-label">
+                        TELEMETRY
+                    </span>
+
+                    <h3>
+                        Motion Data
+                    </h3>
+                </div>
+
+                <span class="data-live">
+                    ● LIVE
+                </span>
+
+            </div>
+
+
+            <div class="telemetry-grid">
+
+                <div class="metric-card highlight">
+
+                    <span>
+                        OBJECT STATUS
+                    </span>
+
+                    <strong id="detected">
+                        WAITING
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>
+                        DIRECTION
+                    </span>
+
+                    <strong id="direction">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>
+                        CURRENT SPEED
+                    </span>
+
+                    <strong>
+
+                        <span id="speed">
+                            0.0
+                        </span>
+
+                        <small>
+                            px/s
+                        </small>
+
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>
+                        FRAME RATE
+                    </span>
+
+                    <strong>
+
+                        <span id="fps">
+                            0.0
+                        </span>
+
+                        <small>
+                            FPS
+                        </small>
+
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>
+                        TOTAL DISTANCE
+                    </span>
+
+                    <strong>
+
+                        <span id="total-distance">
+                            0.0
+                        </span>
+
+                        <small>
+                            px
+                        </small>
+
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>
+                        DISPLACEMENT
+                    </span>
+
+                    <strong>
+
+                        <span id="displacement">
+                            0.0
+                        </span>
+
+                        <small>
+                            px
+                        </small>
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- PERFORMANCE -->
+
+        <section class="panel performance-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-label">
+                        PERFORMANCE
+                    </span>
+
+                    <h3>
+                        Motion Statistics
+                    </h3>
+                </div>
+
+                <span class="data-live">
+                    ● REAL TIME
+                </span>
+
+            </div>
+
+
+            <div class="performance-grid">
+
+                <div class="performance-card">
+
+                    <span>
+                        AVERAGE SPEED
+                    </span>
+
+                    <strong>
+                        <span id="average-speed">
+                            0.0
+                        </span>
+
+                        <small>
+                            px/s
+                        </small>
+                    </strong>
+
+                </div>
+
+
+                <div class="performance-card">
+
+                    <span>
+                        MAXIMUM SPEED
+                    </span>
+
+                    <strong>
+                        <span id="max-speed">
+                            0.0
+                        </span>
+
+                        <small>
+                            px/s
+                        </small>
+                    </strong>
+
+                </div>
+
+
+                <div class="performance-card">
+
+                    <span>
+                        ACCELERATION
+                    </span>
+
+                    <strong>
+                        <span id="acceleration">
+                            0.0
+                        </span>
+
+                        <small>
+                            px/s²
+                        </small>
+                    </strong>
+
+                </div>
+
+
+                <div class="performance-card">
+
+                    <span>
+                        TRACKING TIME
+                    </span>
+
+                    <strong>
+                        <span id="tracking-duration">
+                            0.0
+                        </span>
+
+                        <small>
+                            sec
+                        </small>
+                    </strong>
+
+                </div>
+
+
+                <div class="performance-card">
+
+                    <span>
+                        TRACKED FRAMES
+                    </span>
+
+                    <strong id="tracked-frames">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="performance-card">
+
+                    <span>
+                        FRAME SIZE
+                    </span>
+
+                    <strong id="frame-size">
+                        640 × 480
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- COORDINATES -->
+
+        <section class="panel coordinates-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-label">
+                        POSITION
+                    </span>
+
+                    <h3>
+                        Object Coordinates
+                    </h3>
+                </div>
+
+                <div class="coordinate-icon">
+                    +
+                </div>
+
+            </div>
+
+
+            <div class="coordinates-display">
+
+                <div class="coordinate-axis">
+
+                    <span>
+                        X POSITION
+                    </span>
+
+                    <strong id="center-x">
+                        —
+                    </strong>
+
+                    <small>
+                        pixels
+                    </small>
+
+                </div>
+
+
+                <div class="coordinate-divider"></div>
+
+
+                <div class="coordinate-axis">
+
+                    <span>
+                        Y POSITION
+                    </span>
+
+                    <strong id="center-y">
+                        —
+                    </strong>
+
+                    <small>
+                        pixels
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- PIPELINE -->
+
+        <section class="panel processing-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-label">
+                        PIPELINE
+                    </span>
+
+                    <h3>
+                        Processing Stack
+                    </h3>
+                </div>
+
+            </div>
+
+
+            <div class="pipeline">
+
+                <div class="pipeline-step active">
+
+                    <div class="step-number">
+                        01
+                    </div>
+
+                    <div>
+                        <strong>
+                            Camera Input
+                        </strong>
+
+                        <span>
+                            Frame acquisition
+                        </span>
+                    </div>
+
+                    <i></i>
+
+                </div>
+
+
+                <div class="pipeline-line"></div>
+
+
+                <div class="pipeline-step active">
+
+                    <div class="step-number">
+                        02
+                    </div>
+
+                    <div>
+                        <strong>
+                            Object Detection
+                        </strong>
+
+                        <span>
+                            HSV color segmentation
+                        </span>
+                    </div>
+
+                    <i></i>
+
+                </div>
+
+
+                <div class="pipeline-line"></div>
+
+
+                <div class="pipeline-step active">
+
+                    <div class="step-number">
+                        03
+                    </div>
+
+                    <div>
+                        <strong>
+                            Object Tracking
+                        </strong>
+
+                        <span>
+                            Position estimation
+                        </span>
+                    </div>
+
+                    <i></i>
+
+                </div>
+
+
+                <div class="pipeline-line"></div>
+
+
+                <div class="pipeline-step active">
+
+                    <div class="step-number">
+                        04
+                    </div>
+
+                    <div>
+                        <strong>
+                            Motion Analysis
+                        </strong>
+
+                        <span>
+                            Velocity & trajectory
+                        </span>
+                    </div>
+
+                    <i></i>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- TRAJECTORY -->
+
+        <section class="panel trajectory-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-label">
+                        MOTION HISTORY
+                    </span>
+
+                    <h3>
+                        Object Trajectory
+                    </h3>
+
+                </div>
+
+                <span class="trajectory-info">
+                    LAST 100 POSITIONS
+                </span>
+
+            </div>
+
+
+            <div class="trajectory-container">
+
+                <canvas
+                    id="trajectoryCanvas"
+                ></canvas>
+
+                <div class="trajectory-label x-label">
+                    X AXIS
+                </div>
+
+                <div class="trajectory-label y-label">
+                    Y AXIS
+                </div>
+
+                <div
+                    class="trajectory-empty"
+                    id="trajectory-empty"
+                >
+                    Waiting for movement data...
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SYSTEM -->
+
+        <section class="panel system-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-label">
+                        SYSTEM
+                    </span>
+
+                    <h3>
+                        Runtime Status
+                    </h3>
+                </div>
+
+            </div>
+
+
+            <div class="system-list">
+
+                <div class="system-row">
+
+                    <span>
+                        Detection Engine
+                    </span>
+
+                    <strong class="online">
+                        ONLINE
+                    </strong>
+
+                </div>
+
+
+                <div class="system-row">
+
+                    <span>
+                        Tracking Engine
+                    </span>
+
+                    <strong class="online">
+                        ONLINE
+                    </strong>
+
+                </div>
+
+
+                <div class="system-row">
+
+                    <span>
+                        Motion Analyzer
+                    </span>
+
+                    <strong class="online">
+                        ONLINE
+                    </strong>
+
+                </div>
+
+
+                <div class="system-row">
+
+                    <span>
+                        Telemetry API
+                    </span>
+
+                    <strong class="online">
+                        ONLINE
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="footer">
+
+        <div>
+            <strong>VisionTrack</strong>
+            <span>Computer Vision Object Tracker</span>
+        </div>
+
+        <div>
+            Python · OpenCV · NumPy · Flask
+        </div>
+
+    </footer>
+
+</div>
+
+
+<script
+    src="{{ url_for('static', filename='script.js') }}"
+></script>
+
+</body>
+</html>
